@@ -7,5 +7,6 @@
 *.iml
 .gradle
 web/
+build/
 out
 gen
