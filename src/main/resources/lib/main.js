@@ -11,7 +11,7 @@ require.config({
 
 require(['jquery', "KotlinJsPlayGround_main"], function ($, example) {
     $(function () {
-            example.simple.sayHi();
+            example.simpleflux.Main.run();
         }
     );
 });
