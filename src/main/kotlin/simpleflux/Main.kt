@@ -12,6 +12,10 @@ import kotlin.browser.document
 
 object Main {
     fun run() {
+        addControllersToDom(initializeStores())
+    }
+
+    private fun initializeStores(): ListStore {
         val listStore = ListStore()
         AppDispatcher.action = { event, data ->
             when (event) {
@@ -27,13 +31,18 @@ object Main {
                 }
             }
         }
+        return listStore
+    }
 
+    private fun addControllersToDom(listStore: ListStore) {
         val listViewController = ItemListViewController(listStore)
         val addDeleteController = ItemAddDeleteViewController(listStore)
         val countController = ItemCountViewController(listStore)
 
-        document.body!!.appendChild(listViewController.render())
-        document.body!!.appendChild(addDeleteController.render())
-        document.body!!.appendChild(countController.render())
+        with(document.querySelector("#app")!!) {
+            appendChild(countController.render())
+            appendChild(addDeleteController.render())
+            appendChild(listViewController.render())
+        }
     }
 }
