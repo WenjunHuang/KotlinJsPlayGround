@@ -1,4 +1,4 @@
-package counter
+package counter.view
 
 import counter.store.SummaryStore
 import kotlinx.html.div
@@ -18,11 +18,7 @@ class ControlPanel : ReactDOMComponent<ReactComponentNoProps, ControlPanel.State
 
     init {
         state = State(SummaryStore.getSummary())
-        SummaryStore.addChangeListener {
-            setState {
-                sum = SummaryStore.getSummary()
-            }
-        }
+
     }
 
     override fun ReactDOMBuilder.render() {
@@ -35,6 +31,20 @@ class ControlPanel : ReactDOMComponent<ReactComponentNoProps, ControlPanel.State
             div {
                 +"Total Count: ${state.sum}"
             }
+        }
+    }
+
+    override fun componentDidMount() {
+        SummaryStore.addChangeListener(this::onSummaryStoreChanged)
+    }
+
+    override fun componentWillUnmount() {
+        SummaryStore.removeChangeListener(this::onSummaryStoreChanged)
+    }
+
+    private fun onSummaryStoreChanged() {
+        setState {
+            sum = SummaryStore.getSummary()
         }
     }
 

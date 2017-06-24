@@ -1,4 +1,4 @@
-import counter.ControlPanel
+import counter.view.ControlPanel
 import counter.store.counterActions
 import counter.store.CounterStore
 import counter.store.SummaryStore
