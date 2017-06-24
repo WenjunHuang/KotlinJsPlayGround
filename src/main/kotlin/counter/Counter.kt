@@ -1,7 +1,7 @@
 package counter
 
-import counter.action.DecrementAction
-import counter.action.IncrementAction
+import counter.store.DecrementAction
+import counter.store.IncrementAction
 import counter.store.CounterStore
 import kotlinx.html.button
 
@@ -21,10 +21,10 @@ class Counter : ReactDOMComponent<Counter.Props, Counter.State>() {
     companion object : ReactComponentSpec<Counter, Props, State>
 
     init {
-        state = State(props.initValue)
+        state = State(CounterStore.counterValues[props.caption]!!)
         CounterStore.addChangeListener {
             setState {
-                state.counter = CounterStore.counterValues[props.caption]!!
+                counter = CounterStore.counterValues[props.caption]!!
             }
         }
     }
@@ -53,12 +53,8 @@ class Counter : ReactDOMComponent<Counter.Props, Counter.State>() {
     }
 
     private fun updateCounter(increment: Boolean) {
-//        val oldValue = state.counter
-//        val newValue = state.counter + diff
-//        setState { counter = newValue }
-
+        println("called updateCounter")
         AppDispatcher.dispatch(if (increment) IncrementAction(props.caption) else DecrementAction(props.caption))
-
     }
 
 
@@ -88,7 +84,7 @@ class Counter : ReactDOMComponent<Counter.Props, Counter.State>() {
 
 
     data class State(var counter: Int = 0) : RState
-    data class Props(val caption: String, val initValue: Int = 0) : RProps()
+    data class Props(val caption: String) : RProps()
 
 }
 

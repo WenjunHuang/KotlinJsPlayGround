@@ -6,8 +6,8 @@ buildscript {
     ext.html_version = '0.6.3'
     ext.webDir = 'web'
     repositories {
-        maven { url 'http://192.168.2.247:8081/repository/PlatformMaven/' }
-//        maven { url 'http://192.168.2.247:8078' }
+//        maven { url 'http://192.168.2.247:8081/repository/PlatformMaven/' }
+        maven { url 'http://61.145.62.114:8078' }
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -20,13 +20,14 @@ apply plugin: 'kotlin2js'
 apply plugin: 'org.jetbrains.kotlin.frontend'
 
 kotlinFrontend {
-    sourceMaps = false
+//    sourceMaps = true
 
     npm {
         replaceVersion("kotlinx-html-js", "1.1.0")
         replaceVersion("kotlinx-html-shared", "1.1.0")
         replaceVersion("kotlin-js-library", "1.1.0")
 
+//        dependency("phantomjs-prebuilt")
         dependency("react")
         dependency("react-dom")
         dependency("react-router")
@@ -41,8 +42,11 @@ kotlinFrontend {
     }
 
     webpackBundle {
+        sourceMapEnabled=true
         publicPath = "/frontend/"
         port = 8080
+        bundleName="main"
+        contentPath=file("src/main/resources")
 //        proxyUrl = "http://localhost:9090"
     }
 }
@@ -59,26 +63,26 @@ compileKotlin2Js {
     kotlinOptions.sourceMap = true
     kotlinOptions.moduleKind = 'commonjs'
     kotlinOptions.main = "call"
-    kotlinOptions.sourceMap = true
 }
 
-sourceSets {
-    main.output.resourcesDir = "build/js/resources"
-}
-
-task copyResources(type: Copy) {
-    from sourceSets.main.resources.srcDirs
-//    into sourceSets.main.output.resourcesDir
-    into file(buildDir.path)
-}
-
-afterEvaluate {
-    tasks.getByName("webpack-bundle") { dependsOn(copyResources) }
-    tasks.getByName("webpack-run") { dependsOn(copyResources) }
-}
+//sourceSets {
+//    main.output.resourcesDir = "build/js/resources"
+//}
+//
+//task copyResources(type: Copy) {
+//    from sourceSets.main.resources.srcDirs
+////    into sourceSets.main.output.resourcesDir
+//    into file(buildDir.path)
+//}
+//
+//afterEvaluate {
+//    tasks.getByName("webpack-bundle") { dependsOn(copyResources) }
+//    tasks.getByName("webpack-run") { dependsOn(copyResources) }
+//}
 
 repositories {
-    maven { url 'http://192.168.2.247:8081/repository/PlatformMaven/' }
+//    maven { url 'http://192.168.2.247:8081/repository/PlatformMaven/' }
+    maven { url 'http://61.145.62.114:8078' }
 //    maven { url 'http://192.168.2.247:8078' }
 //    maven {url  "http://dl.bintray.com/kotlin/kotlinx.html/"}
 }

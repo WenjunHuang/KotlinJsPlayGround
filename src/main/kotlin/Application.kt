@@ -1,6 +1,8 @@
 import counter.ControlPanel
-import counter.action.counterActions
+import counter.store.counterActions
 import counter.store.CounterStore
+import counter.store.SummaryStore
+import counter.store.summaryActions
 import kotlinx.html.div
 import react.dom.ReactDOM
 import react.dom.render
@@ -12,7 +14,8 @@ import kotlin.browser.document
  */
 
 fun main(args: Array<String>) {
-    AppDispatcher.register(CounterStore::counterActions)
+    SummaryStore.DispatchToken = AppDispatcher.register(SummaryStore::summaryActions)
+    CounterStore.DispatchToken = AppDispatcher.register(CounterStore::counterActions)
 
     ReactDOM.render(document.getElementById("app")) {
         div {

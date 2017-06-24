@@ -1,8 +1,11 @@
 package counter
 
+import counter.store.SummaryStore
 import kotlinx.html.div
 import kotlinx.html.hr
-import react.*
+import react.RState
+import react.ReactComponentNoProps
+import react.ReactComponentSpec
 import react.dom.ReactDOMBuilder
 import react.dom.ReactDOMComponent
 
@@ -13,17 +16,20 @@ import react.dom.ReactDOMComponent
 class ControlPanel : ReactDOMComponent<ReactComponentNoProps, ControlPanel.State>() {
     companion object : ReactComponentSpec<ControlPanel, ReactComponentNoProps, State>
 
-    val initValues = arrayOf(0,10,20)
-
     init {
-        state = State(initValues.sum())
+        state = State(SummaryStore.getSummary())
+        SummaryStore.addChangeListener {
+            setState {
+                sum = SummaryStore.getSummary()
+            }
+        }
     }
 
     override fun ReactDOMBuilder.render() {
         div(classes = "chap02-controlPanel") {
-            Counter(Counter.Props("First", initValues[0])) {}
-            Counter(Counter.Props("Second", initValues[1])) {}
-            Counter(Counter.Props("Third", initValues[2])) {}
+            Counter(Counter.Props("First")) {}
+            Counter(Counter.Props("Second")) {}
+            Counter(Counter.Props("Third")) {}
 
             hr {}
             div {
@@ -32,12 +38,5 @@ class ControlPanel : ReactDOMComponent<ReactComponentNoProps, ControlPanel.State
         }
     }
 
-    fun onCounterUpdate(newValue:Int, oldValue:Int) {
-       val dif = newValue - oldValue
-        setState {
-            sum = state.sum + dif
-        }
-    }
-
-    data class State(var sum:Int = 0):RState
+    data class State(var sum: Int = 0) : RState
 }
